@@ -15,32 +15,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import mx.utng.latp.smarthealthmonitor.navigation.SmartHealthNavGraph
 import mx.utng.latp.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import mx.utng.smarthealthmonitor.LoginScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-            SmartHealthMonitorTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen(
-                        onLoginSuccess = {
-                            // TODO sesión 5: navegar al Dashboard
-                            Log.d("SmartHealth", "Login exitoso")
-                        }
-                    )
-                }
-            }
+            // NavGraph es ahora el punto de entrada — no LoginScreen directamente
+            SmartHealthNavGraph()
         }
     }
-}
 
 
 
 
-@Preview(showBackground = true, name = "Light")
+
+    @Preview(showBackground = true, name = "Light")
 @Preview(showBackground = true, name = "Dark",
     uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
 @Composable
@@ -76,4 +68,4 @@ private fun LoginScreenPreview() {
     SmartHealthMonitorTheme {
         LoginScreen()
     }
-}
+}}
