@@ -30,16 +30,30 @@ import mx.utng.latp.smarthealthmonitor.ui.components.FilaHistorial
 import mx.utng.latp.smarthealthmonitor.ui.components.TarjetaDato
 import mx.utng.latp.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import mx.utng.latp.smarthealthmonitor.ui.viewmodel.DashboardViewModel
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+
 fun DashboardScreen(
     onHistorialClick: () -> Unit = {},
     onAlertClick: () -> Unit = {},
-    // TODO S6: Reemplazar con ViewModel que recibe datos del wearable
-    fc: Int = MockData.fcActual,
-    pasos: Int = MockData.pasosActual,
-    historial: List<LecturaFC> = MockData.historialFC
+    viewModel: DashboardViewModel = viewModel()  // ← inyección automática
 ) {
+    // collectAsState() convierte StateFlow en State de Compose
+    val fc     by viewModel.fc.collectAsState()
+    val pasos  by viewModel.pasos.collectAsState()
+    val historial = viewModel.historial
+
+    // El resto del Composable no cambia.
+    // fc y pasos ahora son reactivos: cuando el wearable
+    // envía un dato, el Dashboard se actualiza automáticamente.
+
+
     SmartHealthMonitorTheme {
         Scaffold(
             topBar = {
