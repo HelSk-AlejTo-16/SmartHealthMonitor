@@ -2,16 +2,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
+    id("com.google.devtools.ksp") version "2.0.0-1.0.21"
 }
 
 android {
     namespace = "mx.utng.latp.smarthealthmonitor"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "mx.utng.latp.smarthealthmonitor"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -71,9 +72,16 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.8.0")
-    // Wearable Data Layer API
-    implementation("com.google.android.gms:play-services-wearable:18.2.0")
+    // Wearable Data Layer API — misma versión que el módulo :wear (via catalog)
+    implementation(libs.play.services.wearable)
     // Coroutines para await()
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    // Necesario para generar el código del DAO
+
+    ksp("androidx.room:room-compiler:$roomVersion")
 
 }

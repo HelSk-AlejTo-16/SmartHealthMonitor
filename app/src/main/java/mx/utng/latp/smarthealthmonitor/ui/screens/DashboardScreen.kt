@@ -103,7 +103,8 @@ fun DashboardScreen(
                         valor      = "$fc",
                         unidad     = "bpm",
                         label      = "Frecuencia cardíaca",
-                        colorValor = MaterialTheme.colorScheme.error
+                        colorValor = MaterialTheme.colorScheme.error,
+                        conectado  = fc > 0          // false → muestra "--" y "Esperando reloj…"
                     )
                 }
                 // ── Tarjeta Pasos ─────────────────────────
@@ -112,7 +113,8 @@ fun DashboardScreen(
                         valor      = "%,d".format(pasos),
                         unidad     = "pasos",
                         label      = "Pasos del día",
-                        colorValor = MaterialTheme.colorScheme.primary
+                        colorValor = MaterialTheme.colorScheme.primary,
+                        conectado  = pasos > 0       // false → muestra "--" y "Esperando reloj…"
                     )
                 }
                 // ── Encabezado historial ──────────────────

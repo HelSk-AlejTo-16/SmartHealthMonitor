@@ -1,32 +1,31 @@
 package mx.utng.latp.smarthealthmonitor.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
-
-import mx.utng.latp.smarthealthmonitor.data.models.MockData
 import mx.utng.latp.smarthealthmonitor.data.SmartHealthRepository
-import mx.utng.latp.smarthealthmonitor.data.WearListenerService
+import mx.utng.latp.smarthealthmonitor.data.models.MockData
 
 class DashboardViewModel : ViewModel() {
 
-    // FC: viene del wearable real vía Repository.
-    // Si es 0 (sin dato aún), usar valor simulado.
+    // Escuchamos el repositorio.
     val fc: StateFlow<Int> = SmartHealthRepository.fcFlow
-        .map { if (it == 0) MockData.fcActual else it }
+        .onEach { Log.d("DashboardViewModel", "📱 UI Recibió FC: $it") }
         .stateIn(
-            scope          = viewModelScope,
-            started        = SharingStarted.WhileSubscribed(5_000),
-            initialValue   = MockData.fcActual
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0
         )
 
     val pasos: StateFlow<Int> = SmartHealthRepository.pasosFlow
-        .map { if (it == 0) MockData.pasosActual else it }
+        .onEach { Log.d("DashboardViewModel", "📱 UI Recibió Pasos: $it") }
         .stateIn(
-            scope        = viewModelScope,
-            started      = SharingStarted.WhileSubscribed(5_000),
-            initialValue = MockData.pasosActual
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = 0
         )
-    val historial = MockData.historialFC  // TODO S7: Room
-}
 
+    // Recuperamos la propiedad historial que necesita la pantalla
+    val historial = MockData.historialFC
+}
