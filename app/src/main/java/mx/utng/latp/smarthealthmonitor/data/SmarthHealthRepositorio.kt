@@ -17,6 +17,7 @@ import mx.utng.latp.smarthealthmonitor.data.db.SmartHealthDB
  * El ViewModel lee de aquí.
  */
 object SmartHealthRepository {
+    val pasosFlow: Any
     private val _fcFlow = MutableStateFlow(0)
     val fcFlow: StateFlow<Int> = _fcFlow.asStateFlow()
 
@@ -36,6 +37,7 @@ object SmartHealthRepository {
     fun obtenerHistorial(): Flow<List<LecturaFC>> =
         dao?.obtenerUltimas() ?: emptyFlow()
 }
+//comentario
 
 // En Application.kt (crear si no existe):
 class SmartHealthApp : Application() {
