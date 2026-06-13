@@ -1,33 +1,63 @@
 package mx.utng.latp.smarthealthmonitor.data
 
-
 import android.util.Log
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.WearableListenerService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class WearListenerService : WearableListenerService() {
 
+    // BUG #5 CORREGIDO: Se cambia Dispatchers.Main por Dispatchers.IO.
+    // WearableListenerService corre en background sin contexto de UI,
+    // usar Main podía causar que las actualizaciones al repositorio fallaran.
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     companion object {
-        const val PATH_FC    = "/smarthealthmonitor/fc"
-        const val PATH_PASOS = "/smarthealthmonitor/pasos"
-        private const val TAG = "WearListener"
+        private const val TAG = "WearListenerService"
+        private const val PATH_FC = "/smarthealthmonitor/fc"
+        private const val PATH_PASOS = "/smarthealthmonitor/pasos"
     }
 
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        val data   = String(messageEvent.data)
-        val path   = messageEvent.path
-        Log.d(TAG, "Mensaje recibido: path=$path, data=$data")
+        // Log inmediato para debug - esto DEBE aparecer si la conexión física existe
+        Log.i(TAG, "🔔onMessageReceived ejecutado!")
+        
+        val path = messageEvent.path
+        val data = String(messageEvent.data)
+        
+        Log.i(TAG, "📥 MENSAJE RECIBIDO -> Path: $path | Data: $data")
 
-        when (path) {
-            PATH_FC -> {
-                val bpm = data.toIntOrNull() ?: return
-                SmartHealthRepository.actualizarFC(bpm)
+        // Usamos el scope para asegurar que la actualización del repositorio sea detectada por el ViewModel
+        scope.launch {
+            try {
+                when (path) {
+                    PATH_FC -> {
+                        val bpm = data.toIntOrNull()
+                        if (bpm != null) {
+                            Log.d(TAG, "💓 Actualizando Repositorio: $bpm BPM")
+                            SmartHealthRepository.actualizarFC(bpm)
+                        }
+                    }
+                    PATH_PASOS -> {
+                        val pasos = data.toIntOrNull()
+                        if (pasos != null) {
+                            Log.d(TAG, "👟 Actualizando Repositorio: $pasos")
+                            SmartHealthRepository.actualizarFC(pasos)
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "❌ Error procesando mensaje: ${e.message}")
             }
-            PATH_PASOS -> {
-                val pasos = data.toIntOrNull() ?: return
-                SmartHealthRepository.actualizarPasos(pasos)
-            }
-            else -> Log.w(TAG, "Path desconocido: $path")
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 }

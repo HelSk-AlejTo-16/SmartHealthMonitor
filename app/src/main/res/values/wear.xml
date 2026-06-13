@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Esta capacidad permite que el reloj encuentre al teléfono automáticamente -->
+    <string-array name="android_wear_capabilities">
+        <item>health_monitor_receiver</item>
+    </string-array>
+</resources>
