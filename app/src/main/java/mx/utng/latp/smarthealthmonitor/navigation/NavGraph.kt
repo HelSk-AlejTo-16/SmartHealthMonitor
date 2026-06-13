@@ -19,6 +19,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import mx.utng.latp.smarthealthmonitor.ui.screens.DashboardScreen
+import mx.utng.latp.smarthealthmonitor.ui.screens.HistorialScreen
 import mx.utng.latp.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import mx.utng.smarthealthmonitor.LoginScreen
 
@@ -55,13 +56,11 @@ fun SmartHealthNavGraph() {
         }
         // ── Historial ──────────────────────────────────
         composable(Screen.Historial.route) {
-            // TODO Ejercicio extra: HistorialScreen completo
-            // Por ahora: pantalla temporal con Back
-            PantallaEnConstruccion(
-                titulo = "Historial completo",
+            HistorialScreen(  // ← ya no es PantallaEnConstruccion
                 onBack = { navController.popBackStack() }
             )
         }
+
         // ── Alerta ─────────────────────────────────────
         composable(Screen.Alerta.route) {
             PantallaEnConstruccion(
@@ -93,7 +92,7 @@ fun PantallaEnConstruccion(titulo: String, onBack: () -> Unit) {
             Box(
                 Modifier.fillMaxSize().padding(pad),
                 contentAlignment = Alignment.Center) {
-                Text("Próximamente: $titulo",
+                Text(" $titulo",
                     style = MaterialTheme.typography.titleMedium)
             }
         }
