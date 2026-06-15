@@ -90,15 +90,7 @@ fun HistorialScreen(
                     }
                     
                     items(lecturas, key = { it.id }) { lectura ->
-                        // Convertimos la entidad de Room (db.LecturaFC) al modelo de UI (models.LecturaFC)
-                        FilaHistorial(
-                            lectura = mx.utng.latp.smarthealthmonitor.data.models.LecturaFC(
-                                id = lectura.id,
-                                valorBpm = lectura.valorBpm,
-                                hora = lectura.hora,
-                                esNormal = lectura.esNormal
-                            )
-                        )
+                        FilaHistorial(lectura = lectura)
                     }
                 }
             }

@@ -17,7 +17,9 @@ import mx.utng.latp.smarthealthmonitor.data.db.SmartHealthDB
  * El ViewModel lee de aquí.
  */
 object SmartHealthRepository {
-    val pasosFlow: Any
+    private val _pasosFlow = MutableStateFlow(0)
+    val pasosFlow: StateFlow<Int> = _pasosFlow.asStateFlow()
+
     private val _fcFlow = MutableStateFlow(0)
     val fcFlow: StateFlow<Int> = _fcFlow.asStateFlow()
 
@@ -31,6 +33,10 @@ object SmartHealthRepository {
         _fcFlow.value = bpm
         // Persistir en Room automáticamente
         dao?.insertar(LecturaFC(valorBpm = bpm))
+    }
+
+    fun actualizarPasos(pasos: Int) {
+        _pasosFlow.value = pasos
     }
 
     // Flow del historial desde Room

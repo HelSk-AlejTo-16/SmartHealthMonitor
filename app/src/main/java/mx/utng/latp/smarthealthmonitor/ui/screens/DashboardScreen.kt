@@ -21,11 +21,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import mx.utng.latp.smarthealthmonitor.data.models.LecturaFC
+import mx.utng.latp.smarthealthmonitor.data.db.LecturaFC
 import mx.utng.latp.smarthealthmonitor.data.models.MockData
 import mx.utng.latp.smarthealthmonitor.ui.components.FilaHistorial
 import mx.utng.latp.smarthealthmonitor.ui.components.TarjetaDato
@@ -47,10 +49,11 @@ fun DashboardScreen(
     onAlertClick: () -> Unit = {},
     viewModel: DashboardViewModel = viewModel()  // ← inyección automática
 ) {
+    val scope = rememberCoroutineScope()
     // collectAsState() convierte StateFlow en State de Compose
     val fc     by viewModel.fc.collectAsState()
     val pasos  by viewModel.pasos.collectAsState()
-    val historial = viewModel.historial
+    val historial by viewModel.historial.collectAsState()
 
     // El resto del Composable no cambia.
     // fc y pasos ahora son reactivos: cuando el wearable
@@ -142,7 +145,9 @@ fun DashboardScreen(
                             onClick = {
                                 // Simular lectura del wearable
                                 val fcSimulado = (60..110).random()
-                                SmartHealthRepository.actualizarFC(fcSimulado)
+                                scope.launch {
+                                    SmartHealthRepository.actualizarFC(fcSimulado)
+                                }
                                 SmartHealthRepository.actualizarPasos((3000..8000).random())
                             },
                             modifier = Modifier.fillMaxWidth()
