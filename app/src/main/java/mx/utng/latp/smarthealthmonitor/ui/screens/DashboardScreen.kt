@@ -1,5 +1,6 @@
 package mx.utng.latp.smarthealthmonitor.ui.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -21,12 +22,12 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import mx.utng.latp.smarthealthmonitor.data.models.LecturaFC
-import mx.utng.latp.smarthealthmonitor.data.models.MockData
 import mx.utng.latp.smarthealthmonitor.ui.components.FilaHistorial
 import mx.utng.latp.smarthealthmonitor.ui.components.TarjetaDato
 import mx.utng.latp.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
@@ -34,9 +35,15 @@ import mx.utng.latp.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import mx.utng.latp.smarthealthmonitor.data.SmartHealthRepository
 import mx.utng.latp.smarthealthmonitor.ui.viewmodel.DashboardViewModel
 import mx.utng.latp.smarthealthmonitor.BuildConfig
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarDuration
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -44,21 +51,39 @@ import mx.utng.latp.smarthealthmonitor.BuildConfig
 
 fun DashboardScreen(
     onHistorialClick: () -> Unit = {},
-    onAlertClick: () -> Unit = {},
-    viewModel: DashboardViewModel = viewModel()  // ← inyección automática
+    viewModel: DashboardViewModel = viewModel(),
+    onAlertClick: () -> Unit
 ) {
-    // collectAsState() convierte StateFlow en State de Compose
-    val fc     by viewModel.fc.collectAsState()
-    val pasos  by viewModel.pasos.collectAsState()
-    val historial = viewModel.historial
+    val fc       by viewModel.fc.collectAsState()
+    val pasos    by viewModel.pasos.collectAsState()
+    val historial by viewModel.historial.collectAsState()
 
-    // El resto del Composable no cambia.
-    // fc y pasos ahora son reactivos: cuando el wearable
-    // envía un dato, el Dashboard se actualiza automáticamente.
+    // ── Estado del diálogo y Snackbar ──────────────────────
+    var mostrarAlerta by remember { mutableStateOf(false) }
+    val snackbarHost  = remember { SnackbarHostState() }
+    val scope         = rememberCoroutineScope()
 
+    // ── Diálogo condicional ────────────────────────────────
+    if (mostrarAlerta) {
+        AlertaScreen(
+            fc          = fc,
+            onDismiss   = { mostrarAlerta = false },
+            onConfirmar = {
+                mostrarAlerta = false
+                scope.launch {
+                    snackbarHost.showSnackbar(
+                        message  = "✅ Alerta enviada a tus contactos de emergencia",
+                        duration = SnackbarDuration.Long
+                    )
+                }
+            }
+        )
+    }
 
     SmartHealthMonitorTheme {
         Scaffold(
+            // ── Snackbar host en el Scaffold ───────────────
+            snackbarHost = { SnackbarHost(hostState = snackbarHost) },
             topBar = {
                 TopAppBar(
                     title = {
@@ -75,17 +100,16 @@ fun DashboardScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
-                    onClick       = onAlertClick,
+                    onClick        = { mostrarAlerta = true },
                     containerColor = MaterialTheme.colorScheme.error
                 ) {
-                    Icon(
-                        imageVector       = Icons.Default.Warning,
+                    Icon(Icons.Default.Warning,
                         contentDescription = "Enviar alerta de emergencia",
-                        tint              = MaterialTheme.colorScheme.onError
-                    )
+                        tint = MaterialTheme.colorScheme.onError)
                 }
             }
-        ) { paddingValues ->
+        )
+        { paddingValues ->
             // ⚠️ paddingValues OBLIGATORIO
             LazyColumn(
                 modifier = Modifier
@@ -142,7 +166,9 @@ fun DashboardScreen(
                             onClick = {
                                 // Simular lectura del wearable
                                 val fcSimulado = (60..110).random()
-                                SmartHealthRepository.actualizarFC(fcSimulado)
+                                scope.launch {
+                                    SmartHealthRepository.actualizarFC(fcSimulado)
+                                }
                                 SmartHealthRepository.actualizarPasos((3000..8000).random())
                             },
                             modifier = Modifier.fillMaxWidth()
@@ -160,10 +186,14 @@ fun DashboardScreen(
 @Preview(showBackground = true, name = "Dashboard - Light",
     showSystemUi = true, device = "id:pixel_6")
 @Preview(showBackground = true, name = "Dashboard - Dark",
-    uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+    uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun DashboardScreenPreview() {
     SmartHealthMonitorTheme {
-        DashboardScreen()
+        DashboardScreen(
+            onHistorialClick = TODO(),
+            viewModel = TODO(),
+            onAlertClick = TODO()
+        )
     }
 }

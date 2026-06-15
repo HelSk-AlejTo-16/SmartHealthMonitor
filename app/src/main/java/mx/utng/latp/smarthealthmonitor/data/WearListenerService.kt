@@ -46,7 +46,7 @@ class WearListenerService : WearableListenerService() {
                         val pasos = data.toIntOrNull()
                         if (pasos != null) {
                             Log.d(TAG, "👟 Actualizando Repositorio: $pasos")
-                            SmartHealthRepository.actualizarFC(pasos)
+                            SmartHealthRepository.actualizarPasos(pasos)
                         }
                     }
                 }

@@ -15,6 +15,11 @@ class DashboardViewModel : ViewModel() {
         .stateIn(viewModelScope,
             SharingStarted.WhileSubscribed(5_000), MockData.fcActual)
 
+    val pasos: StateFlow<Int> = SmartHealthRepository.pasosFlow
+        .map { if (it == 0) MockData.pasosActual else it }
+        .stateIn(viewModelScope,
+            SharingStarted.WhileSubscribed(5_000), MockData.pasosActual)
+
     // ← NUEVO: historial desde Room (Flow reactivo)
     val historial: StateFlow<List<LecturaFC>> =
         SmartHealthRepository.obtenerHistorial()
