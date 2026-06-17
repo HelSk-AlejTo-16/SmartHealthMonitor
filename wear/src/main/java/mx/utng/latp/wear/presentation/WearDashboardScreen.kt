@@ -26,7 +26,8 @@ import androidx.wear.compose.material3.Card
 
 @Composable
 fun WearDashboardScreen(
-    onAlertClick: () -> Unit = {},
+    onAlertClick:    () -> Unit = {},
+    onHistorialClick: () -> Unit = {},   // ← NUEVO parámetro
     viewModel: WearDashboardViewModel = viewModel()
 ) {
     val fc by viewModel.fc.collectAsState()
@@ -60,6 +61,14 @@ fun WearDashboardScreen(
                     colors   = ChipDefaults.primaryChipColors(
                         backgroundColor = MaterialTheme.colors.error
                     ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            // Item 3: Chip de Historial ← NUEVO
+            item {
+                Chip(
+                    label    = { Text("📋 Historial") },
+                    onClick  = onHistorialClick,
                     modifier = Modifier.fillMaxWidth()
                 )
             }

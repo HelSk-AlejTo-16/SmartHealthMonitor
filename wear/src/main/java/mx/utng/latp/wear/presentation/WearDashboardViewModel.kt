@@ -7,13 +7,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import mx.utng.latp.wear.presentation.healthMonitor.wear.WearHealthState
+import mx.utng.latp.wear.presentation.model.LecturaFC
 
 /**
  * ViewModel del dashboard del reloj.
  *
- * Observa WearHealthState.fcFlow (equivalente local a SmartHealthRepository.fcFlow
- * del módulo :app — no se puede importar directamente porque ambos son módulos
- * :application y AGP 8.x lo rechaza como dynamic features inválido).
+ * Observa WearHealthState (equivalente local a SmartHealthRepository del módulo :app
+ * — no se puede importar directamente porque ambos son módulos :application
+ * y AGP 8.x lo rechaza como dynamic features inválido).
  */
 class WearDashboardViewModel : ViewModel() {
 
@@ -27,12 +28,21 @@ class WearDashboardViewModel : ViewModel() {
             initialValue = 72
         )
 
-    // Pasos del día (disponible para pantallas que lo necesiten)
+    // Pasos del día
     val pasos: StateFlow<Int> = WearHealthState.pasosFlow
-        .map { it }
         .stateIn(
             scope        = viewModelScope,
             started      = SharingStarted.WhileSubscribed(5_000),
             initialValue = 0
         )
+
+    // ← NUEVO: historial de lecturas desde WearHealthState
+    // (equivalente a SmartHealthRepository.obtenerHistorial() del módulo :app)
+    val historial: StateFlow<List<LecturaFC>> =
+        WearHealthState.historialFlow
+            .stateIn(
+                scope        = viewModelScope,
+                started      = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyList()
+            )
 }
