@@ -60,6 +60,24 @@
             Se elimina ese atributo para que Health Services pueda invocarlo libremente.
         -->
         <service
+            android:name="mx.utng.smarthealthmonitor.wear.watchface.SmartHealthWatchFaceService"
+            android:exported="true"
+            android:label="SmartHealth Watch Face"
+            android:permission="android.permission.BIND_WALLPAPER">
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_digital" />
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+        </service>
+
+        <!-- HealthDataService: recibe datos de Health Services en segundo plano -->
+        <service
             android:name="mx.utng.latp.wear.presentation.healthMonitor.wear.HealthDataService"
             android:exported="true">
             <intent-filter>
