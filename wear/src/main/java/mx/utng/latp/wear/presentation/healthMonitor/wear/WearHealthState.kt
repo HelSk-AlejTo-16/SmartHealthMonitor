@@ -42,6 +42,7 @@ object WearHealthState {
 
     /** Llamado por HealthDataService / SensorManager cuando hay nuevo BPM */
     fun actualizarBpm(bpm: Int) {
+        android.util.Log.d("WearHealthState", "💓 Actualizando BPM en el estado: $bpm")
         _fcFlow.value = bpm
         onNuevoBpm?.invoke(bpm)
 
@@ -52,6 +53,7 @@ object WearHealthState {
 
     /** Llamado por HealthDataService / SensorManager cuando hay nuevos pasos */
     fun actualizarPasos(pasos: Int) {
+        android.util.Log.d("WearHealthState", "👣 Actualizando Pasos en el estado: $pasos")
         _pasosFlow.value = pasos
         onNuevoPasos?.invoke(pasos)
     }
