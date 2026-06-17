@@ -13,13 +13,14 @@ uiToolingPreview = "1.11.2"
 uiTooling = "1.11.2"
 material3 = "1.4.0"
 composeMaterial = "1.6.2"
-playServicesWearable = "20.0.1"
+playServicesWearable = "18.2.0"
 composeMaterial3 = "1.5.6"
 composeFoundation = "1.5.6"
 composeUiTooling = "1.5.6"
 wearToolingPreview = "1.0.0"
 coreSplashscreen = "1.2.0"
 ksp = "2.1.0-1.0.29"
+runtime = "1.11.2"
 
 [libraries]
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
@@ -48,6 +49,7 @@ androidx-compose-foundation = { group = "androidx.wear.compose", name = "compose
 compose-ui-tooling = { group = "androidx.wear.compose", name = "compose-ui-tooling", version.ref = "composeUiTooling" }
 androidx-wear-tooling-preview = { group = "androidx.wear", name = "wear-tooling-preview", version.ref = "wearToolingPreview" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

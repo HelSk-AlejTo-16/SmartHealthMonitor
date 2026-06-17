@@ -9,11 +9,12 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        // ✅ applicationId IGUAL al de la app del teléfono — REQUERIMIENTO de la Wearable Data Layer API.
-        // Google Play Services enruta mensajes entre apps con el MISMO applicationId.
-        // El namespace (mx.utng.latp.wear) puede ser distinto, pero el applicationId NO.
-        // NOTA: namespace ≠ applicationId. El namespace es solo para generar la clase R.
-        applicationId = "mx.utng.latp.smarthealthmonitor"
+        // El wear debe tener un applicationId DISTINTO al del teléfono.
+        // AGP 8.x no permite que dos módulos :app compartan el mismo applicationId
+        // a menos que estén configurados como base + dynamic-feature (que no es el caso).
+        // La comunicación Wearable sigue funcionando vía Bluetooth pairing + capability
+        // discovery (node-based), independientemente del applicationId.
+        applicationId = "mx.utng.latp.smarthealthmonitor.wear"
         minSdk = 30
         targetSdk = 35
         versionCode = 1
@@ -46,6 +47,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -64,5 +66,24 @@ dependencies {
     implementation("com.google.guava:guava:33.0.0-android")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("androidx.compose.material:material-icons-extended")
+    // ViewModel + viewModelScope para WearDashboardViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
+
+
+    // Compose for Wear OS
+    implementation("androidx.wear.compose:compose-material:1.3.1")
+    implementation("androidx.wear.compose:compose-foundation:1.3.1")
+    implementation("androidx.wear.compose:compose-navigation:1.3.1")
+    // Horologist (utilidades Wear OS de Google)
+    implementation("com.google.android.horologist:horologist-compose-layout:0.6.17")
+    implementation("com.google.android.horologist:horologist-compose-material:0.6.17")
+    // ELIMINADO: implementation(project(":app"))
+    // Un módulo :application NO puede depender de otro módulo :application.
+    // AGP 8.x lo detecta como dynamic features inválido → error de build.
+    // La comunicación wear↔phone se hace vía Wearable Data Layer API,
+    // no mediante importación directa de clases entre módulos.
 
 }

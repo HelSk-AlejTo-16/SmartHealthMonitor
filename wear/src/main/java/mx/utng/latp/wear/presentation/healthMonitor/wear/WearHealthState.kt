@@ -1,37 +1,49 @@
 package mx.utng.latp.wear.presentation.healthMonitor.wear
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+
 /**
- * Singleton compartido entre HealthDataService (escribe) y WearApp composable (lee).
+ * Repositorio de estado de salud local del reloj.
  *
- * Cuando el PassiveListenerService detecta un nuevo BPM del sensor del reloj,
- * escribe aquí. La UI del reloj escucha los callbacks onNuevoBpm / onNuevoPasos
- * y actualiza su estado local de Compose automáticamente.
+ * Equivalente al SmartHealthRepository del módulo :app, pero para el lado del reloj.
+ * El módulo :wear NO puede importar directamente del módulo :app (ambos son :application,
+ * y AGP 8.x lo interpreta como dynamic features → error de build).
  *
- * También guarda el último valor recibido para inicializar la UI cuando se abre la app.
+ * Flujo de datos:
+ *   Sensor (HealthDataService / SensorManager)
+ *      → WearHealthState.actualizarBpm()
+ *      → fcFlow emite nuevo valor
+ *      → WearDashboardViewModel lo observa y actualiza la UI
+ *      → WearDataSender envía el valor al teléfono vía Wearable API
  */
 object WearHealthState {
 
-    // Último BPM detectado por el sensor (0 = sin datos todavía)
-    var ultimoBpm: Int = 0
-        private set
+    // ── StateFlows observables por el ViewModel ───────────────────────────────
+    private val _fcFlow    = MutableStateFlow(0)
+    val fcFlow:    StateFlow<Int> = _fcFlow.asStateFlow()
 
-    // Últimos pasos detectados (0 = sin datos todavía)
-    var ultimoPasos: Int = 0
-        private set
+    private val _pasosFlow = MutableStateFlow(0)
+    val pasosFlow: StateFlow<Int> = _pasosFlow.asStateFlow()
 
-    // Callbacks que la UI registra para recibir actualizaciones reactivas
+    // ── Acceso directo al último valor (para inicializar la UI) ───────────────
+    val ultimoBpm:   Int get() = _fcFlow.value
+    val ultimoPasos: Int get() = _pasosFlow.value
+
+    // ── Callbacks para la UI Compose (compatibilidad con LaunchedEffect) ──────
     var onNuevoBpm:   ((Int) -> Unit)? = null
     var onNuevoPasos: ((Int) -> Unit)? = null
 
-    /** Llamado por HealthDataService cuando el sensor entrega un nuevo BPM */
+    /** Llamado por HealthDataService / SensorManager cuando hay nuevo BPM */
     fun actualizarBpm(bpm: Int) {
-        ultimoBpm = bpm
+        _fcFlow.value = bpm
         onNuevoBpm?.invoke(bpm)
     }
 
-    /** Llamado por HealthDataService cuando el sensor entrega nuevos pasos */
+    /** Llamado por HealthDataService / SensorManager cuando hay nuevos pasos */
     fun actualizarPasos(pasos: Int) {
-        ultimoPasos = pasos
+        _pasosFlow.value = pasos
         onNuevoPasos?.invoke(pasos)
     }
 }
