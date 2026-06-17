@@ -66,6 +66,7 @@ dependencies {
     implementation("com.google.guava:guava:33.0.0-android")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    implementation("androidx.compose.material:material-icons-extended")
     // ViewModel + viewModelScope para WearDashboardViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
