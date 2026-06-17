@@ -25,12 +25,24 @@ Desarrollada como proyecto integrador -UNTG 9no Cuatrimestre 2026.
 |AlertaScreen|AlertDialog MD3 + Snackbar de confirmación|
 
 
+
+# Unidad II - Wear OS
+| Pantallas           | Descripción                                         |
+|---------------------|-----------------------------------------------------|
+| WearDashboardScreen | FC en tiempo real con ScalingLazyColumn y Time Text |
+| WearHistorialScreen | Lista con Rotary Input(corona del reloj)            |
+| WearAlertaScreen    | Botones Circulares de confirmación                  |
+| WearHistorialScreen | Hora + FC en el WatchFree nativo                    |
+
 ## Capturas de pantallas.
 
 ![Login](screenshots/login.png)
 ![Dashboard](screenshots/dashboard.png)
 ![Historial](screenshots/historial.png)
 ![Alerta](screenshots/alerta.png)
+
+![WatchFace](screenshots/watchface.png)
+![WearDashboard](screenshots/wear_dashboard.png)
 
 ## Autor
 Leonel Alejandro Torres Pérez - UTNG - leyotorres1501@gmail.com
