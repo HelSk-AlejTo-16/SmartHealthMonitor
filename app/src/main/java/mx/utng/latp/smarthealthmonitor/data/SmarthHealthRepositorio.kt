@@ -51,5 +51,4 @@ class SmartHealthApp : Application() {
         super.onCreate()
         SmartHealthRepository.init(this)  // inicializar Room
     }
-
 }

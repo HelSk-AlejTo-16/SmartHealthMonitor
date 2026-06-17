@@ -42,7 +42,7 @@
 
         <!-- Actividad Principal -->
         <activity
-            android:name="mx.utng.latp.wear.presentation.WearMainActivity"
+            android:name="mx.utng.smarthealthmonitor.wear.presentation.WearMainActivity"
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting">
