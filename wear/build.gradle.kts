@@ -47,6 +47,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
@@ -65,6 +66,10 @@ dependencies {
     implementation("com.google.guava:guava:33.0.0-android")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+    // ViewModel + viewModelScope para WearDashboardViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
+
 
 
     // Compose for Wear OS
@@ -80,4 +85,4 @@ dependencies {
     // La comunicación wear↔phone se hace vía Wearable Data Layer API,
     // no mediante importación directa de clases entre módulos.
 
-}
+}
