@@ -10,7 +10,7 @@
         android:required="false" />
 
     <application
-        android:theme="@style/Theme.SmartHealthTV"
+        android:theme="@style/Theme.SmartHealthMonitor"
         android:banner="@drawable/banner_tv"> <!-- 320x180dp -->
         <activity android:name=".MainActivity"
             android:exported="true"

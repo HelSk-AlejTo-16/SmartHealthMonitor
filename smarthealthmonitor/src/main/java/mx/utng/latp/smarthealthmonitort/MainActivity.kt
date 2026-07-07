@@ -1,18 +1,8 @@
 package mx.utng.latp.smarthealthmonitort
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.tv.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.FragmentActivity
-import androidx.tv.material3.ExperimentalTvMaterial3Api
-import androidx.tv.material3.Surface
-import mx.utng.latp.smarthealthmonitort.ui.theme.SmartHealthMonitorTheme
+import mx.utng.latp.smarthealthmonitort.tv.MainFragment
 
 /**
  * MainActivity para Android TV.
