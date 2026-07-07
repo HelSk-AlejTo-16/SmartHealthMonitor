@@ -6,7 +6,16 @@ import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.*
 import mx.utng.latp.smarthealthmonitort.R
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
+
 class MainFragment : BrowseSupportFragment() {
+
+    private val viewModel: TvViewModel by viewModels()
+    private lateinit var histAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -20,6 +29,19 @@ class MainFragment : BrowseSupportFragment() {
         brandColor = resources.getColor(R.color.sh_primary, null)
 
         cargarFilas()
+        observarDatos()
+    }
+
+    private fun observarDatos() {
+        // Observar historial de Room y actualizar la fila
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.historial.collect { lecturas ->
+                    histAdapter.clear()
+                    lecturas.forEach { histAdapter.add(it) }
+                }
+            }
+        }
     }
 
     private fun cargarFilas() {
@@ -33,8 +55,8 @@ class MainFragment : BrowseSupportFragment() {
         rowsAdapter.add(ListRow(HeaderItem("Estado actual"), estadoAdapter))
 
         // ── Fila 2: Historial de FC ────────────────────
-        val histAdapter = ArrayObjectAdapter(FCCardPresenter())
-        MockData.historialFC.forEach { histAdapter.add(it) }
+        // Fila historial con adapter reactivo
+        histAdapter = ArrayObjectAdapter(FCCardPresenter())
         rowsAdapter.add(ListRow(HeaderItem("Historial FC"), histAdapter))
 
         this.adapter = rowsAdapter
