@@ -1,5 +1,10 @@
 package mx.utng.latp.smarthealthmonitor.ui.screens
 
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.mediarouter.app.MediaRouteButton
+import com.google.android.gms.cast.framework.CastButtonFactory
+import androidx.compose.foundation.layout.size
+
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -85,18 +90,7 @@ fun DashboardScreen(
             // ── Snackbar host en el Scaffold ───────────────
             snackbarHost = { SnackbarHost(hostState = snackbarHost) },
             topBar = {
-                TopAppBar(
-                    title = {
-                        Text(
-                            text = "SmartHealth",
-                            style = MaterialTheme.typography.titleLarge
-                        )
-                    },
-                    colors = TopAppBarDefaults.topAppBarColors(
-                        containerColor    = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onPrimary
-                    )
-                )
+                DashboardTopBar(title = "SmartHealth")
             },
             floatingActionButton = {
                 FloatingActionButton(
@@ -181,6 +175,34 @@ fun DashboardScreen(
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DashboardTopBar(title: String) {
+    TopAppBar(
+        title = {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge
+            )
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
+        ),
+        actions = {
+            // CastButton: AndroidView que envuelve MediaRouteButton
+            AndroidView(
+                factory = { context ->
+                    MediaRouteButton(context).apply {
+                        CastButtonFactory.setUpMediaRouteButton(context, this)
+                    }
+                },
+                modifier = Modifier.size(48.dp)
+            )
+        }
+    )
 }
 
 @Preview(showBackground = true, name = "Dashboard - Light",
