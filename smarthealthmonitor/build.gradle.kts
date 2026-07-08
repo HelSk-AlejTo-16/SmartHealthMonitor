@@ -44,6 +44,7 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:2024.12.01"))
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.material3:material3")
     implementation("androidx.navigation:navigation-compose:2.8.5")
     
     // Compose for TV
@@ -61,6 +62,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.tooling)
+
+    // ExoPlayer (Media3)
+    implementation("androidx.media3:media3-exoplayer:1.2.1")
+    implementation("androidx.media3:media3-ui:1.2.1")
 
     // Glide para cargar imágenes en las cards
     implementation("com.github.bumptech.glide:glide:4.16.0")
