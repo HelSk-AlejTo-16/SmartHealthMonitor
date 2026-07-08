@@ -5,7 +5,7 @@
          Theme.Leanback hereda de AppCompat y agrega los
          estilos de navegación D-pad automáticamente -->
     <style name="Theme.SmartHealthMonitor"
-        parent="Theme.Leanback">
+        parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/sh_primary</item>
         <item name="colorAccent">@color/sh_amber</item>
         <item name="android:colorBackground">@color/sh_dark</item>

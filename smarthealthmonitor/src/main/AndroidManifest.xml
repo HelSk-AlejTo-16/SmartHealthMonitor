@@ -12,20 +12,13 @@
     <application
         android:theme="@style/Theme.SmartHealthMonitor"
         android:banner="@drawable/banner_tv"> <!-- 320x180dp -->
-        <activity android:name=".MainActivity"
+        <activity android:name=".tv.TVActivity"
             android:exported="true"
             android:label="SmartHealth TV">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <!-- Categoría LEANBACK_LAUNCHER: aparece en launcher TV -->
-                <category android:name=
-                    "android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
-        </activity>
-
-        <activity android:name=".tv.TVActivity"
-            android:exported="true"
-            android:label="TV Compose App">
         </activity>
     </application>
 

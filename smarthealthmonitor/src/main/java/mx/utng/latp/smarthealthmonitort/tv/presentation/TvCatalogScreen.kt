@@ -2,6 +2,9 @@ package mx.utng.latp.smarthealthmonitort.tv.presentation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.tv.material3.Text
 import androidx.tv.material3.MaterialTheme
@@ -15,9 +18,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.tv.foundation.lazy.list.TvLazyColumn
-import androidx.tv.foundation.lazy.list.TvLazyRow
-import androidx.tv.foundation.lazy.list.items
 
 @Composable
 fun TvCatalogScreen(
@@ -33,14 +33,14 @@ fun TvCatalogScreen(
             return@Box
         }
 
-        TvLazyColumn(
+        LazyColumn(
             modifier = Modifier.fillMaxSize().padding(48.dp),
             verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             // Fila 1: FC actual
             item {
                 RowSection(title = "⚡ Estado Actual — ${state.fcActual} bpm") {
-                    TvLazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         items(state.lecturas.takeLast(3)) { lectura ->
                             FcCardItem(lectura = lectura, onClick = { onCardClick(lectura.id) })
                         }
@@ -51,7 +51,7 @@ fun TvCatalogScreen(
             // Fila 2: Historial completo
             item {
                 RowSection(title = "📋 Historial FC") {
-                    TvLazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    LazyRow(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
                         items(state.lecturas) { lectura ->
                             FcCardItem(lectura = lectura, onClick = { onCardClick(lectura.id) })
                         }

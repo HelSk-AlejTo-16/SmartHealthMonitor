@@ -16,7 +16,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import mx.utng.latp.smarthealthmonitort.tv.presentation.TvCatalogScreen
+import mx.utng.latp.smarthealthmonitort.tv.presentation.TvDetailScreen
+import mx.utng.latp.smarthealthmonitort.tv.presentation.TvPlaybackScreen
 
+/**
+ * Actividad principal para el módulo de TV.
+ * Utiliza Jetpack Compose y Navigation para manejar las pantallas.
+ */
 class TVActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,16 +62,4 @@ fun SmartHealthTvTheme(content: @Composable () -> Unit) {
     content()
 }
 
-@Composable
-fun TvDetailScreen(lecturaId: Int, navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("TvDetailScreen Placeholder: $lecturaId")
-    }
-}
 
-@Composable
-fun TvPlaybackScreen(navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("TvPlaybackScreen Placeholder")
-    }
-}
