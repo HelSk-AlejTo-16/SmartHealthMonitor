@@ -23,6 +23,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".tv.TVActivity"
+            android:exported="true"
+            android:label="TV Compose App">
+        </activity>
     </application>
 
 </manifest>
