@@ -11,8 +11,8 @@ import mx.utng.latp.smarthealthmonitort.tv.MockData
  * Como el módulo TV no puede importar el módulo App directamente (restricción de Gradle),
  * simulamos el repositorio aquí para que la app compile y puedas probar la interfaz.
  */
-object SmartHealthRepository {
-    val fcFlow = MutableStateFlow(88) // Valor simulado
+class SmartHealthRepository {
+    val fcActual = MutableStateFlow(88) // Valor simulado
 
     fun obtenerHistorial(): Flow<List<LecturaFC>> {
         return flowOf(MockData.historialFC)
