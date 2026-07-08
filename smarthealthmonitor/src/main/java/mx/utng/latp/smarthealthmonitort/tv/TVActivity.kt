@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import mx.utng.latp.smarthealthmonitort.tv.presentation.TvCatalogScreen
 
 class TVActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,13 +54,6 @@ class TVActivity : ComponentActivity() {
 fun SmartHealthTvTheme(content: @Composable () -> Unit) {
     // Tema temporal
     content()
-}
-
-@Composable
-fun TvCatalogScreen(onCardClick: (Int) -> Unit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("TvCatalogScreen Placeholder")
-    }
 }
 
 @Composable
