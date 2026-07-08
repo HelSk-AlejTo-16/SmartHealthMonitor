@@ -17,6 +17,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import mx.utng.latp.smarthealthmonitort.tv.presentation.TvCatalogScreen
 
+/**
+ * Actividad principal para el módulo de TV.
+ * Utiliza Jetpack Compose y Navigation para manejar las pantallas.
+ */
 class TVActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
