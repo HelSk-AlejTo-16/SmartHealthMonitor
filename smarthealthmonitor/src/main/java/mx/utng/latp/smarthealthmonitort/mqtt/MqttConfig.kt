@@ -1,0 +1,17 @@
+package mx.utng.latp.smarthealthmonitort.mqtt
+
+object MqttConfig {
+    const val BROKER_URL  = "ssl://5e214de2dce64bbc97371dd3e04de438.s1.eu.hivemq.cloud:8883"
+    const val USERNAME    = "Leo1234"
+    const val PASSWORD    = "utng1234"
+
+    const val TOPIC_FC    = "utng/smarthealthmonitor/fc"
+    const val TOPIC_TV    = "utng/smarthealthmonitor/tv"
+    const val TOPIC_ALERT = "utng/smarthealthmonitor/alerta"
+
+    const val QOS = 1
+
+    const val CLIENT_WEAR = "smarthealthmonitor-wear"
+    const val CLIENT_APP  = "smarthealthmonitor-app"
+    const val CLIENT_TV   = "smarthealthmonitor-tv"
+}

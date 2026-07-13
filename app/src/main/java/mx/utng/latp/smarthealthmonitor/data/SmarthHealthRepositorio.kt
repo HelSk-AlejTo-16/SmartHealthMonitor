@@ -20,7 +20,7 @@ object SmartHealthRepository {
     private val _pasosFlow = MutableStateFlow(0)
     val pasosFlow: StateFlow<Int> = _pasosFlow.asStateFlow()
 
-    private val _fcFlow = MutableStateFlow(0)
+    internal val _fcFlow = MutableStateFlow(0)
     val fcFlow: StateFlow<Int> = _fcFlow.asStateFlow()
 
     private var dao: LecturaFCDao? = null
@@ -47,8 +47,17 @@ object SmartHealthRepository {
 
 // En Application.kt (crear si no existe):
 class SmartHealthApp : Application() {
+    lateinit var mqttService: mx.utng.latp.smarthealthmonitor.mqtt.MqttAppService
+
     override fun onCreate() {
         super.onCreate()
         SmartHealthRepository.init(this)  // inicializar Room
+        
+        // Inicializar MQTT con el MutableStateFlow del Repository
+        mqttService = mx.utng.latp.smarthealthmonitor.mqtt.MqttAppService(
+            context = this,
+            fcFlow  = SmartHealthRepository._fcFlow
+        )
+        mqttService.connect()
     }
 }
