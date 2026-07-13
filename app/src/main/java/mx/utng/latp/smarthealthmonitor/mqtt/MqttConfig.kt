@@ -2,7 +2,7 @@ package mx.utng.latp.smarthealthmonitor.mqtt
 
 object MqttConfig {
     // ⚠️ Reemplaza con los datos de TU cluster HiveMQ
-    const val BROKER_URL  = "5e214de2dce64bbc97371dd3e04de438.s1.eu.hivemq.cloud"
+    const val BROKER_URL  = "ssl://5e214de2dce64bbc97371dd3e04de438.s1.eu.hivemq.cloud:8883"
     const val USERNAME    = "Leo1234"  // del Access Management
     const val PASSWORD    = "utng1234"
 
