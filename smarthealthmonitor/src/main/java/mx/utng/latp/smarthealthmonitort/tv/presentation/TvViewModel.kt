@@ -14,6 +14,10 @@ class TvViewModel(
     private val _state = MutableStateFlow(TvUiState())
     val state: StateFlow<TvUiState> = _state.asStateFlow()
 
+    // Flow de mensajes MQTT entrantes
+    private val mqttFlow = MutableStateFlow<mx.utng.latp.smarthealthmonitort.mqtt.TvMessage?>(null)
+    private val mqttSubscriber = mx.utng.latp.smarthealthmonitort.mqtt.MqttTvSubscriber(mqttFlow)
+
     init {
         // Observar historial reactivo del Room DAO
         viewModelScope.launch {
@@ -23,11 +27,25 @@ class TvViewModel(
                     _state.update { it.copy(lecturas = lecturas, isLoading = false) }
                 }
         }
-        // Observar FC actual (StateFlow del sensor)
+        
+        mqttSubscriber.connect()
+
+        // Observar mensajes MQTT y actualizar el estado de la UI
         viewModelScope.launch {
-            repository.fcActual.collect { bpm ->
-                _state.update { it.copy(fcActual = bpm) }
+            mqttFlow.collect { tvMsg ->
+                tvMsg ?: return@collect
+                _state.update { it.copy(
+                    fcActual = tvMsg.bpm,
+                    fcEstado = tvMsg.estado,
+                    ultimaHora = tvMsg.hora,
+                    isLoading = false
+                )}
             }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mqttSubscriber.disconnect()
     }
 }
