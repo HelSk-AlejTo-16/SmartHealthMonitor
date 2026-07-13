@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import mx.utng.latp.wear.presentation.healthMonitor.wear.WearHealthState
@@ -45,4 +46,25 @@ class WearDashboardViewModel : ViewModel() {
                 started      = SharingStarted.WhileSubscribed(5_000),
                 initialValue = emptyList()
             )
+
+    private val mqttPublisher = mx.utng.latp.wear.mqtt.MqttWearPublisher()
+
+    init {
+        mqttPublisher.connect()
+        viewModelScope.launch {
+            fc.collect { bpm ->
+                val estado = when {
+                    bpm < 60 -> "FC Baja"
+                    bpm > 100 -> "FC Alta"
+                    else -> "Normal"
+                }
+                mqttPublisher.publishFC(bpm, estado)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        mqttPublisher.disconnect()
+    }
 }
