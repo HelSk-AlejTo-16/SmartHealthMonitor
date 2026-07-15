@@ -12,16 +12,10 @@ import java.util.Locale
  * Esta clase replica la misma estructura para que WearHistorialScreen compile.
  */
 data class LecturaFC(
-    val id: Long = System.currentTimeMillis(),
-    val valorBpm: Int,
-    val timestamp: Long = System.currentTimeMillis()
-) {
-    /** true si la FC está en rango normal (60–100 bpm) */
-    val esNormal: Boolean get() = valorBpm in 60..100
-
-    /** Hora formateada como HH:mm:ss para mostrar en la lista */
-    val hora: String get() {
-        val sdf = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
-        return sdf.format(Date(timestamp))
-    }
-}
+    val id: Int = 0,
+    val bpm: Int,
+    val estado: String = "Normal",
+    val dispositivo: String = "wear",
+    val hora: String,
+    val sincronizado: Boolean = false
+)

@@ -23,16 +23,19 @@ object SmartHealthRepository {
     internal val _fcFlow = MutableStateFlow(0)
     val fcFlow: StateFlow<Int> = _fcFlow.asStateFlow()
 
-    private var dao: LecturaFCDao? = null
+    private var syncRepo: mx.utng.latp.smarthealthmonitor.data.repository.SyncRepository? = null
 
     fun init(context: Context) {
-        dao = SmartHealthDB.getDatabase(context).lecturaDao()
+        val dao = SmartHealthDB.getDatabase(context).lecturaDao()
+        syncRepo = mx.utng.latp.smarthealthmonitor.data.repository.SyncRepository(dao)
     }
 
     suspend fun actualizarFC(bpm: Int) {
         _fcFlow.value = bpm
-        // Persistir en Room automáticamente
-        dao?.insertar(LecturaFC(valorBpm = bpm))
+        // Persistir y sincronizar a través del nuevo SyncRepository
+        val estado = if (bpm in 60..100) "Normal" else "Anormal"
+        val hora = java.text.SimpleDateFormat("HH:mm", java.util.Locale.getDefault()).format(java.util.Date())
+        syncRepo?.insertarLectura(LecturaFC(bpm = bpm, estado = estado, hora = hora))
     }
 
     fun actualizarPasos(pasos: Int) {
@@ -41,7 +44,7 @@ object SmartHealthRepository {
 
     // Flow del historial desde Room
     fun obtenerHistorial(): Flow<List<LecturaFC>> =
-        dao?.obtenerUltimas() ?: emptyFlow()
+        syncRepo?.observarHistorial() ?: emptyFlow()
 }
 //comentario
 

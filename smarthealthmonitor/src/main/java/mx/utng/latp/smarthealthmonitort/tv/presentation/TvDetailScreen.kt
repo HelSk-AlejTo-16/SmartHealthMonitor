@@ -52,13 +52,13 @@ fun TvDetailScreen(
                 Text("❤", fontSize = 80.sp)
             }
             Text(
-                "${lectura.valorBpm} bpm",
+                "${lectura.bpm} bpm",
                 style = MaterialTheme.typography.displayMedium,
                 color = Color.White, 
                 fontWeight = FontWeight.ExtraBold
             )
             
-            val estadoTexto = if (lectura.esNormal) "Normal" else "Alerta"
+            val estadoTexto = lectura.estado
             Text(
                 "Estado: $estadoTexto",
                 style = MaterialTheme.typography.bodyLarge, 

@@ -47,7 +47,9 @@ object WearHealthState {
         onNuevoBpm?.invoke(bpm)
 
         // Agregar al historial (conservar los últimos 50 registros)
-        val nueva = LecturaFC(valorBpm = bpm)
+        val estado = if (bpm in 60..100) "Normal" else "Alerta"
+        val hora = java.text.SimpleDateFormat("HH:mm:ss", java.util.Locale.getDefault()).format(java.util.Date())
+        val nueva = LecturaFC(bpm = bpm, estado = estado, hora = hora)
         _historialFlow.value = (_historialFlow.value + nueva).takeLast(50)
     }
 
