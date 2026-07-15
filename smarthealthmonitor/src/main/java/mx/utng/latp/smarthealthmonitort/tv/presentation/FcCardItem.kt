@@ -32,13 +32,13 @@ fun FcCardItem(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
-                text = "${lectura.valorBpm} bpm",
+                text = "${lectura.bpm} bpm",
                 style = MaterialTheme.typography.headlineMedium,
                 color = Color.White,
                 fontWeight = FontWeight.Bold
             )
             Column {
-                val estadoTexto = if (lectura.esNormal) "Normal" else "Alerta"
+                val estadoTexto = lectura.estado
                 Text(
                     text = estadoTexto,
                     style = MaterialTheme.typography.bodyMedium,

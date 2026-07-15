@@ -59,10 +59,10 @@
       </SelectionState>
       <SelectionState runConfigName="smarthealthmonitor">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-08T22:59:45.197907Z">
+        <DropdownSelection timestamp="2026-07-13T23:28:32.119318800Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leyot\.android\avd\Pixel_9.avd" />
+              <DeviceId pluginId="LocalEmulator" identifier="path=C:\Users\leyot\.android\avd\Wear_OS_Small_Round.avd" />
             </handle>
           </Target>
         </DropdownSelection>

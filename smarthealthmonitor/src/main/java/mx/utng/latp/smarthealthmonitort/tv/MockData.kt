@@ -2,9 +2,10 @@ package mx.utng.latp.smarthealthmonitort.tv
 
 object MockData {
     val historialFC = listOf(
-        LecturaFC(id = 2, valorBpm = 75, hora = "Hace 1 hr"),
-        LecturaFC(id = 3, valorBpm = 82, hora = "Hace 2 hrs"),
-        LecturaFC(id = 4, valorBpm = 95, hora = "Hace 3 hrs", esNormal = false),
-        LecturaFC(id = 5, valorBpm = 68, hora = "Hace 4 hrs")
+        LecturaFC(1, 78, "Normal", "wear", "11:00", true),
+        LecturaFC(2, 82, "Normal", "app", "10:30", true),
+        LecturaFC(3, 76, "Normal", "wear", "10:00", true),
+        LecturaFC(4, 95, "FC Alta", "wear", "09:30", false),
+        LecturaFC(5, 71, "Normal", "app", "09:00", true)
     )
 }
