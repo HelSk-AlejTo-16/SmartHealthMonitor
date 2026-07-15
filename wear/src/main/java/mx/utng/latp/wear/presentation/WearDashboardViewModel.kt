@@ -48,6 +48,7 @@ class WearDashboardViewModel : ViewModel() {
             )
 
     private val mqttPublisher = mx.utng.latp.wear.mqtt.MqttWearPublisher()
+    private val neonRepo = mx.utng.latp.wear.data.WearNeonRepository()
 
     init {
         mqttPublisher.connect()
@@ -58,7 +59,15 @@ class WearDashboardViewModel : ViewModel() {
                     bpm > 100 -> "FC Alta"
                     else -> "Normal"
                 }
+                
+                // Publicar a MQTT
                 mqttPublisher.publishFC(bpm, estado)
+                
+                // Publicar a Neon directamente desde el reloj
+                launch(kotlinx.coroutines.Dispatchers.IO) {
+                    kotlin.runCatching { neonRepo.publicarLectura(bpm, estado) }
+                        .onFailure { android.util.Log.w("WEAR","Sin red: ${it.message}") }
+                }
             }
         }
     }
