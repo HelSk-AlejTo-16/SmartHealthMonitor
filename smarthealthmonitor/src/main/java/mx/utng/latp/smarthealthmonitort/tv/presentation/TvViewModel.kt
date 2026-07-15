@@ -5,12 +5,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import mx.utng.latp.smarthealthmonitort.data.SmartHealthRepository
+import mx.utng.latp.smarthealthmonitort.data.TvNeonRepository
 import mx.utng.latp.smarthealthmonitort.tv.domain.model.TvUiState
 
 class TvViewModel(
     private val repository: SmartHealthRepository
 ) : ViewModel() {
 
+    private val neonRepo = TvNeonRepository()
     private val _state = MutableStateFlow(TvUiState())
     val state: StateFlow<TvUiState> = _state.asStateFlow()
 
@@ -19,14 +21,7 @@ class TvViewModel(
     private val mqttSubscriber = mx.utng.latp.smarthealthmonitort.mqtt.MqttTvSubscriber(mqttFlow)
 
     init {
-        // Observar historial reactivo del Room DAO
-        viewModelScope.launch {
-            repository.obtenerHistorial()
-                .catch { e -> _state.update { it.copy(error = e.message, isLoading = false) } }
-                .collect { lecturas ->
-                    _state.update { it.copy(lecturas = lecturas, isLoading = false) }
-                }
-        }
+        cargarDatos()
         
         mqttSubscriber.connect()
 
@@ -43,6 +38,25 @@ class TvViewModel(
             }
         }
     }
+
+    fun cargarDatos() {
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading=true) }
+            try {
+                val lecturas = neonRepo.obtenerHistorialCompleto(50)
+                val stats    = neonRepo.obtenerEstadisticas()
+                _state.update { it.copy(
+                    lecturas  = lecturas.map { dto -> dto.toLecturaFC() },
+                    estadisticas = stats.map { dto -> dto.toLecturaFC() },
+                    isLoading = false
+                )}
+            } catch (e: Exception) {
+                _state.update { it.copy(error=e.message, isLoading=false) }
+            }
+        }
+    }
+    
+    fun refresh() = cargarDatos()
 
     override fun onCleared() {
         super.onCleared()
